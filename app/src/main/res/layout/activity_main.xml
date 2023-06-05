@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context="com.example.notification.MainActivity">
 
-    <TextView
+    <!-- Простое уведомление -->
+    <Button
+        android:id="@+id/simple"
+        android:text="Простое уведомление"
+        android:onClick="simpleNotification"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Отмена простого уведомления по идентификатору -->
+    <Button
+        android:id="@+id/simple.cancel"
+        android:text="Убрать простое уведомление"
+        android:onClick="simpleCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Запускаем броузер -->
+    <Button
+        android:id="@+id/browser"
+        android:text="Браузер"
+        android:onClick="browserNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Сложное уведомление - кнопки -->
+    <Button
+        android:id="@+id/complex"
+        android:text="Сложное уведомление"
+        android:onClick="complexNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <!-- Уведомление - картинка
+        со звуком, вибрацией,
+        с приоритетом переднего плана,
+        с бэкстэком
+     -->
+    <Button
+        android:id="@+id/big.picture"
+        android:text="Большая картинка"
+        android:onClick="bigPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Уведомление со своим View -->
+    <Button
+        android:id="@+id/custom"
+        android:text="Собственное уведомление"
+        android:onClick="custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Уведомление с полем inline reply -->
+    <Button
+        android:text="Inline reply уведомление"
+        android:onClick="inlineReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
