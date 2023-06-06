@@ -2,8 +2,11 @@ package com.example.notification
 
 import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
@@ -32,9 +35,18 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     fun simpleNotification(view: View?) {
         val channelId = "my_channel_id"
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel Name"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+
         val builder = NotificationCompat.Builder(this, channelId)
 
-        builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
+        builder.setSmallIcon(android.R.drawable.ic_input_add)
         builder.setContentTitle("Something wrong")
         builder.setContentText("Something important has happened")
 

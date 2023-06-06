@@ -6,6 +6,7 @@
     <item name="GOOGLE_NOTIFICATION_ID" type="id"/>
     <item name="LOUVRE_NOTIFICATION_ID" type="id"/>
     <item name="DIRECT_REPLY_NOTIFICATION_ID" type="id"/>
+    <item name="CHANNEL_ID" type="id"/>
 
     <item name="BROWSER_PENDING_ID" type="id"/>
     <item name="MAP_PENDING_ID" type="id"/>
