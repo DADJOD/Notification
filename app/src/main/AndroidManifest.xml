@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notification"
         tools:targetApi="31">
+
+        <!-- Добавляем новый узел activity -->
+        <activity
+            android:name=".A2">
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

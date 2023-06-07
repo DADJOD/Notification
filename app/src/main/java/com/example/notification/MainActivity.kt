@@ -5,7 +5,9 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -34,9 +36,29 @@ class MainActivity : AppCompatActivity() {
     // заголовок и содержание
     @SuppressLint("MissingPermission")
     fun simpleNotification(view: View?) {
+        val builder = doBuilder()
+
+        builder.setSmallIcon(android.R.drawable.ic_input_add)
+        builder.setContentTitle("Something wrong")
+        builder.setContentText("Something important has happened")
+
+        builder.setLargeIcon(
+            BitmapFactory.decodeResource(
+                resources,
+                R.drawable.beachpicture
+            )
+        )
+
+        manager.notify(
+            R.id.SIMPLE_NOTIFICATION_ID,
+            builder.build()
+        )
+    }
+
+    private fun doBuilder(): NotificationCompat.Builder {
         val channelId = "my_channel_id"
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "My Channel Name"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
@@ -45,32 +67,55 @@ class MainActivity : AppCompatActivity() {
         }
 
         val builder = NotificationCompat.Builder(this, channelId)
-
-        builder.setSmallIcon(android.R.drawable.ic_input_add)
-        builder.setContentTitle("Something wrong")
-        builder.setContentText("Something important has happened")
-
-        manager.notify(
-            R.id.SIMPLE_NOTIFICATION_ID,
-            builder.build()
-        )
+        return builder
     }
 
     // Удаление уведомление -
     // требуется идентификатор, с которым оно
     // было запущено
-    fun simpleCancel(view: View?) {}
+    fun simpleCancel(view: View?) {
+        manager.cancel(R.id.SIMPLE_NOTIFICATION_ID)
+    }
 
     // Запуск браузера через уведомление
+    @SuppressLint("MissingPermission")
     fun browserNotification(view: View?) {
         // Создание PendingIntent - "консерва" которую можно передать кому-то
         // чтобы кто-то другой (не наше приложение) выполнил этот интент
 
+        val a2 = Intent(this, A2::class.java)
+        val pA2 = PendingIntent.getActivity(
+            this,
+            333,
+            a2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         // Что будет выполнено при щелчке на
         // уведомление
 
+        val builder = doBuilder()
+        builder
+            .setSmallIcon(android.R.drawable.ic_input_add)
+            .setContentTitle("Заголовок уведомления")
+            .setContentText("Текст уведомления")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pA2) // Добавляем PendingIntent в качестве действия при нажатии на уведомление
+
+        builder.setLargeIcon(
+            BitmapFactory.decodeResource(
+                resources,
+                R.drawable.beachpicture
+            )
+        )
+
         // После выбора уведомления оно будет убрано
         // из статус-бара
+        builder.setAutoCancel(true)
+
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.notify(R.id.SIMPLE_NOTIFICATION_ID, builder.build())
+
     }
 
     // Сложное уведомление - содержит дополнительные кнопки
