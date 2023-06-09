@@ -10,4 +10,6 @@
     <string name="KEY_TEXT_REPLY">key_text_reply</string>
     <string name="activity_2">Activity 2</string>
     <string name="activity_3">Activity 3</string>
+    <string name="inbox_style">Inbox Style</string>
+    <string name="big_picture">Big picture</string>
 </resources>

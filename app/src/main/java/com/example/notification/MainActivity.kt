@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +20,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
+import androidx.core.content.ContextCompat
 
 // import android.support.v7.app.NotificationCompat;
 
 
-@Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var manager: NotificationManagerCompat
@@ -182,6 +184,25 @@ class MainActivity : AppCompatActivity() {
     // Со стэком активностей
     fun bigPicture(view: View?) {
 
+//        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+//        if (vibrator.hasVibrator()) {
+//            val pattern = longArrayOf(0, 400, 200, 400, 200, 400) // пауза, вибрация, пауза, вибрация, пауза, вибрация...
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+//            }
+//        }
+
+        val vibrator = ContextCompat.getSystemService(this, Vibrator::class.java)
+        if (vibrator?.hasVibrator() == true) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val vibrationEffect = VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1)
+                vibrator.vibrate(vibrationEffect)
+            } else {
+                // Для более старых версий Android можно использовать VIBRATE permission и использовать deprecated методы
+                vibrator.vibrate(400)
+            }
+        }
+
         val task = TaskStackBuilder.create(this)
         task.addNextIntent(Intent(this, MainActivity::class.java))
         task.addNextIntent(Intent(this, A2::class.java))
@@ -199,11 +220,11 @@ class MainActivity : AppCompatActivity() {
         style.setSummaryText("У вас ${++numberOfMessages} новых сообщений от Ленны")
         // Картинка из ресурсов
         style.bigPicture(BitmapFactory.decodeResource(resources, R.drawable.lenna))
-        
+
         val channelIid = "my_channel_id"
         val channelName = "Channel for my app"
         val soundUri = Uri.parse("android.resource://" + packageName + "/" + R.raw.bikeringbell)
-        val defaultVibrationPattern = longArrayOf(500, 200, 500)
+//        val defaultVibrationPattern = longArrayOf(500, 200, 500, 200, 500)
 
         val builder = NotificationCompat.Builder(this, channelIid)
 
@@ -230,7 +251,7 @@ class MainActivity : AppCompatActivity() {
             .setStyle(style)
             .setContentIntent(pTask)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setVibrate(defaultVibrationPattern)
+//            .setVibrate(defaultVibrationPattern)
             .setSound(soundUri)
 //            .setDefaults(Notification.DEFAULT_ALL)
 
@@ -242,8 +263,17 @@ class MainActivity : AppCompatActivity() {
         notificationManager.notify(R.id.BIG_PICTURE_NOTIFICATION_ID, notification)
 
         // Есть еще виды стилей
-        // MediaStyle - для проигрывания звука или видео
         // InboxStyle - 6 или 7 строк текста
+        val inboxStyle = NotificationCompat.InboxStyle()
+            .setBigContentTitle("Новые сообщения")
+            .addLine("Сообщение от жены")
+            .setSummaryText("+ еще 2 сообщения")
+            .addLine("Сообщение от бывшей жены")
+            .addLine("Сообщение от суда")
+
+        builder
+            .setStyle(inboxStyle)
+        // MediaStyle - для проигрывания звука или видео
 
         // Чтобы сделать уведомление полноэкранным
         // нужно установить высокий приоритет +

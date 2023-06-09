@@ -46,7 +46,14 @@
      -->
     <Button
         android:id="@+id/big.picture"
-        android:text="Большая картинка"
+        android:text="@string/big_picture"
+        android:onClick="bigPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/inbox.style"
+        android:text="@string/inbox_style"
         android:onClick="bigPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -64,6 +71,7 @@
         android:text="Inline reply уведомление"
         android:onClick="inlineReply"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:ignore="OnClick" />
 
 </LinearLayout>
