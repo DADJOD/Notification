@@ -308,11 +308,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Собственный вид уведомления
+    //JobIntentService
     fun progressService(view: View?) {
         val intent = Intent(this, ProgressService::class.java)
-        startService(intent)
+        ProgressService.startService(this, intent)
     }
+
+    //IntentService
+//    fun progressService(view: View?) {
+//        val intent = Intent(this, ProgressService::class.java)
+//        startService(intent)
+//    }
 
 
 
