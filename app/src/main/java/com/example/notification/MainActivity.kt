@@ -183,25 +183,7 @@ class MainActivity : AppCompatActivity() {
     // Будет полноэкранным (приоритет + звук)
     // Со стэком активностей
     fun bigPicture(view: View?) {
-
-//        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//        if (vibrator.hasVibrator()) {
-//            val pattern = longArrayOf(0, 400, 200, 400, 200, 400) // пауза, вибрация, пауза, вибрация, пауза, вибрация...
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
-//            }
-//        }
-
-        val vibrator = ContextCompat.getSystemService(this, Vibrator::class.java)
-        if (vibrator?.hasVibrator() == true) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val vibrationEffect = VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1)
-                vibrator.vibrate(vibrationEffect)
-            } else {
-                // Для более старых версий Android можно использовать VIBRATE permission и использовать deprecated методы
-                vibrator.vibrate(400)
-            }
-        }
+        vibrate()
 
         val task = TaskStackBuilder.create(this)
         task.addNextIntent(Intent(this, MainActivity::class.java))
@@ -262,8 +244,7 @@ class MainActivity : AppCompatActivity() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(R.id.BIG_PICTURE_NOTIFICATION_ID, notification)
 
-        // Есть еще виды стилей
-        // InboxStyle - 6 или 7 строк текста
+
         val inboxStyle = NotificationCompat.InboxStyle()
             .setBigContentTitle("Новые сообщения")
             .addLine("Сообщение от жены")
@@ -273,31 +254,88 @@ class MainActivity : AppCompatActivity() {
 
         builder
             .setStyle(inboxStyle)
-        // MediaStyle - для проигрывания звука или видео
 
+        // MediaStyle - для проигрывания звука или видео
         // Чтобы сделать уведомление полноэкранным
         // нужно установить высокий приоритет +
         // должна быть или вибрация или звук
     }
 
-    // Собственный вид уведомления
-    fun custom(view: View?) {
+    fun inboxStyle(view: View) {
+        vibrate()
 
-        // PendingIntent на запуск броузера
-        val pIntent: PendingIntent? = null
+        val channelID = "my_channel_id"
+        val channelName = "My Channel"
 
-        // Так как иерархия View не принадлежит
-        // приложению, нужно использовать RemoteViews
-        val remote = RemoteViews(
-            packageName,
-            R.layout.custom
-        )
+        val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Так устанавливаются значения виджетов внутри RemoteViews
-        remote.setImageViewResource(R.id.picture, R.mipmap.ic_launcher)
-        remote.setTextViewText(R.id.text, "Текст с картинкой")
-        remote.setOnClickPendingIntent(R.id.button, pIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Есть еще виды стилей
+        // InboxStyle - 6 или 7 строк текста
+        val inboxStyle = NotificationCompat.InboxStyle()
+            .setBigContentTitle("Новые сообщения")
+            .addLine("Сообщение от жены")
+            .setSummaryText("+ еще 2 сообщения")
+            .addLine("Сообщение от бывшей жены")
+            .addLine("Сообщение от суда")
+
+        val builder = NotificationCompat.Builder(this, channelID)
+            .setSmallIcon(android.R.drawable.ic_input_add)
+            .setContentTitle("Новые сообщения")
+            .setContentText("У вас 7 сообщений")
+            .setStyle(inboxStyle)
+            .setAutoCancel(true)
+
+        val notification = builder.build()
+        notificationManager.notify(R.id.INBOX_STYLE_NOTIFICATION_ID, notification)
     }
+
+    private fun vibrate() {
+        val vibrator = ContextCompat.getSystemService(this, Vibrator::class.java)
+        if (vibrator?.hasVibrator() == true) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val vibrationEffect =
+                    VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1)
+                vibrator.vibrate(vibrationEffect)
+            } else {
+                // Для более старых версий Android можно использовать VIBRATE permission и использовать deprecated методы
+                vibrator.vibrate(400)
+            }
+        }
+    }
+
+    // Собственный вид уведомления
+    fun progressService(view: View?) {
+        val intent = Intent(this, ProgressService::class.java)
+        startService(intent)
+    }
+
+
+
+
+
+
+//    fun custom(view: View?) {
+//
+//        // PendingIntent на запуск броузера
+//        val pIntent: PendingIntent? = null
+//
+//        // Так как иерархия View не принадлежит
+//        // приложению, нужно использовать RemoteViews
+//        val remote = RemoteViews(
+//            packageName,
+//            R.layout.custom
+//        )
+//
+//        // Так устанавливаются значения виджетов внутри RemoteViews
+//        remote.setImageViewResource(R.id.picture, R.mipmap.ic_launcher)
+//        remote.setTextViewText(R.id.text, "Текст с картинкой")
+//        remote.setOnClickPendingIntent(R.id.button, pIntent)
+//    }
 
     // Inline reply уведомление -
     // можно ввести текст

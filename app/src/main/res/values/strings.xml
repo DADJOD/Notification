@@ -12,4 +12,5 @@
     <string name="activity_3">Activity 3</string>
     <string name="inbox_style">Inbox Style</string>
     <string name="big_picture">Big picture</string>
+    <string name="progress_service">Progress Service</string>
 </resources>

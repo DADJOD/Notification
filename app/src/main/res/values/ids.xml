@@ -5,6 +5,7 @@
     <item name="BIG_PICTURE_NOTIFICATION_ID" type="id"/>
     <item name="GOOGLE_NOTIFICATION_ID" type="id"/>
     <item name="LOUVRE_NOTIFICATION_ID" type="id"/>
+    <item name="INBOX_STYLE_NOTIFICATION_ID" type="id"/>
     <item name="DIRECT_REPLY_NOTIFICATION_ID" type="id"/>
     <item name="CHANNEL_ID" type="id"/>
     <item name="MAIN_ACTIVITY_PENDING_ID" type="id"/>
