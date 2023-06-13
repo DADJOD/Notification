@@ -13,8 +13,8 @@ class ProgressWorker(context: Context, workerParams: WorkerParameters) :
     override fun doWork(): Result {
         val notificationManager =
             applicationContext.getSystemService(NotificationManager::class.java)
-        val channelID = "PSid"
-        val channelName = "PSname"
+        val channelID = "PWid"
+        val channelName = "PWname"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =

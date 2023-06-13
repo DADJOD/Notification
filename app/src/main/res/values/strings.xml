@@ -3,8 +3,7 @@
     <string name="title_activity_reply">ReplyActivity</string>
 
     <!--
-        Ключ в intent, отвечающий за передачу
-        текста, набранного пользователем
+        Ключ в intent, отвечающий за передачу текста, набранного пользователем
         в inline reply actions
     -->
     <string name="KEY_TEXT_REPLY">key_text_reply</string>
@@ -13,4 +12,6 @@
     <string name="inbox_style">Inbox Style</string>
     <string name="big_picture">Big picture</string>
     <string name="progress_worker">Progress Worker</string>
+    <string name="progress_service">Progress Service</string>
+    <string name="inline_reply">Inline reply уведомление</string>
 </resources>

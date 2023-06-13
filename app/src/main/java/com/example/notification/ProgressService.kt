@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 
 
 // JobIntentService
-class ProgressService() : JobIntentService() {
+class ProgressService : JobIntentService() {
     companion object {
         private const val JOB_ID = 123
 

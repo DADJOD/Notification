@@ -59,16 +59,24 @@
         android:layout_height="wrap_content" />
 
     <!-- Уведомление со своим View -->
+
     <Button
-        android:id="@+id/custom"
-        android:text="@string/progress_worker"
+        android:id="@+id/progressService"
+        android:text="@string/progress_service"
         android:onClick="progressService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/progressWorker"
+        android:text="@string/progress_worker"
+        android:onClick="progressWorker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <!-- Уведомление с полем inline reply -->
     <Button
-        android:text="Inline reply уведомление"
+        android:text="@string/inline_reply"
         android:onClick="inlineReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

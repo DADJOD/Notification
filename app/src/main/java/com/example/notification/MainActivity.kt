@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
     // Запуск браузера через уведомление
     @SuppressLint("MissingPermission")
     fun browserNotification(view: View?) {
+
         // Создание PendingIntent - "консерва" которую можно передать кому-то
         // чтобы кто-то другой (не наше приложение) выполнил этот интент
-
         val a2 = Intent(this, A2::class.java)
         val pA2 = PendingIntent.getActivity(
             this,
@@ -76,10 +76,9 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // Что будет выполнено при щелчке на
-        // уведомление
-
+        // Что будет выполнено при щелчке на уведомление
         val builder = doBuilder()
+
         builder
             .setSmallIcon(android.R.drawable.ic_input_add)
             .setContentTitle("Заголовок уведомления")
@@ -94,8 +93,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        // После выбора уведомления оно будет убрано
-        // из статус-бара
+        // После выбора уведомления оно будет убрано из статус-бара
         builder.setAutoCancel(true)
 
         val notificationManager = getSystemService(NotificationManager::class.java)
@@ -269,16 +267,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     //WorkManager
-    fun progressService(view: View?) {
+    fun progressWorker(view: View?) {
         val workRequest = OneTimeWorkRequest.Builder(ProgressWorker::class.java).build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 
-//    //JobIntentService
-//    fun progressService(view: View?) {
-//        val intent = Intent(this, ProgressService::class.java)
-//        ProgressService.startService(this, intent)
-//    }
+    //JobIntentService
+    fun progressService(view: View?) {
+        val intent = Intent(this, ProgressService::class.java)
+        ProgressService.startService(this, intent)
+    }
 
     //IntentService
 //    fun progressService(view: View?) {
@@ -286,9 +284,7 @@ class MainActivity : AppCompatActivity() {
 //        startService(intent)
 //    }
 
-    // Inline reply уведомление -
-    // можно ввести текст
-
+    // Inline reply уведомление - можно ввести текст
     @SuppressLint("MissingPermission")
     fun inlineReply(view: View?) {
 
@@ -369,90 +365,4 @@ class MainActivity : AppCompatActivity() {
 
         return NotificationCompat.Builder(this, channelId)
     }
-
-
-//    fun custom(view: View?) {
-//
-//        // PendingIntent на запуск броузера
-//        val pIntent: PendingIntent? = null
-//
-//        // Так как иерархия View не принадлежит
-//        // приложению, нужно использовать RemoteViews
-//        val remote = RemoteViews(
-//            packageName,
-//            R.layout.custom
-//        )
-//
-//        // Так устанавливаются значения виджетов внутри RemoteViews
-//        remote.setImageViewResource(R.id.picture, R.mipmap.ic_launcher)
-//        remote.setTextViewText(R.id.text, "Текст с картинкой")
-//        remote.setOnClickPendingIntent(R.id.button, pIntent)
-//    }
-
-//    fun complexNotification(view: View?) {
-//
-////        // PendingIntent для закрытия уведомления
-////        val pClose = Utility.getBroadcastPendingIntent(this, R.id.CLOSE_PENDING_ID, Intent(this, NotificationReceiver::class.java).apply {
-////            action = NotificationReceiver.ACTION_CLOSE_NOTIFICATION
-////        }, PendingIntent.FLAG_ONE_SHOT)
-//
-//        // PendingIntent для запуска браузера
-//        val pBrowser = Utility.getUriPendingIntent(this, R.id.BROWSER_PENDING_ID, "https://www.louvre.fr/", PendingIntent.FLAG_ONE_SHOT, R.id.LOUVRE_NOTIFICATION_ID)
-//
-//// PendingIntent для запуска карты
-//        val pMap = Utility.getUriPendingIntent(this, R.id.MAP_PENDING_ID, "geo:48.8606,2.3376", PendingIntent.FLAG_ONE_SHOT, R.id.LOUVRE_NOTIFICATION_ID)
-////        // PendingIntent для запуска браузера
-////        val pBrowser = Utility.getUriPendingIntent(this, R.id.BROWSER_PENDING_ID, "https://www.louvre.fr/", PendingIntent.FLAG_ONE_SHOT)
-////
-////        // PendingIntent для запуска карты
-////        val pMap = Utility.getUriPendingIntent(this, R.id.MAP_PENDING_ID, "geo:48.8606,2.3376", PendingIntent.FLAG_ONE_SHOT)
-//
-//        val builder = doBuilder()
-//        builder
-//            .setSmallIcon(android.R.drawable.ic_input_add)
-//            .setContentTitle("Экскурсия в Лувр")
-//            .setContentText("Экскурсия начнется через 15 мин")
-//
-//        // Акция - кнопка с иконкой, текстом и PendingIntent
-//        // Кнопка для открытия веб-сайта
-//        builder.addAction(
-//            android.R.drawable.ic_menu_view,
-//            "Открыть сайт Лувра",
-//            pBrowser
-//        )
-//
-//        // Кнопка для открытия карты
-//        builder.addAction(
-//            android.R.drawable.ic_menu_mapmode,
-//            "Открыть карту Лувра",
-//            pMap
-//        )
-//
-//        // Кнопка для закрытия уведомления
-////        builder.addAction(
-////            android.R.drawable.ic_menu_close_clear_cancel,
-////            "Закрыть",
-////            pClose
-////        )
-//
-//        val notification = builder.build()
-//
-//        val notificationManager = getSystemService(NotificationManager::class.java)
-//        notificationManager.notify(R.id.LOUVRE_NOTIFICATION_ID, notification)
-//    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
