@@ -21,6 +21,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 
 // import android.support.v7.app.NotificationCompat;
 
@@ -308,11 +310,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //JobIntentService
+    //WorkManager
     fun progressService(view: View?) {
-        val intent = Intent(this, ProgressService::class.java)
-        ProgressService.startService(this, intent)
+        val workRequest = OneTimeWorkRequest.Builder(ProgressWorker::class.java).build()
+        WorkManager.getInstance(this).enqueue(workRequest)
     }
+
+//    //JobIntentService
+//    fun progressService(view: View?) {
+//        val intent = Intent(this, ProgressService::class.java)
+//        ProgressService.startService(this, intent)
+//    }
 
     //IntentService
 //    fun progressService(view: View?) {
