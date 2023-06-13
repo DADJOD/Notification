@@ -61,7 +61,7 @@
     <!-- Уведомление со своим View -->
     <Button
         android:id="@+id/custom"
-        android:text="@string/progress_service"
+        android:text="@string/progress_worker"
         android:onClick="progressService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

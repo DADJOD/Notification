@@ -23,12 +23,14 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import kotlin.math.PI
 
 // import android.support.v7.app.NotificationCompat;
 
 
 class MainActivity : AppCompatActivity() {
 
+    private var numberOfMessages = 12
     private lateinit var manager: NotificationManagerCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +40,7 @@ class MainActivity : AppCompatActivity() {
         manager = NotificationManagerCompat.from(this)
     }
 
-    // Самое простое уведомление:
-    // Маленькая иконка для статус бара,
-    // заголовок и содержание
+    // Самое простое уведомление: Маленькая иконка для статус бара, заголовок и содержание
     @SuppressLint("MissingPermission")
     fun simpleNotification(view: View?) {
         val builder = doBuilder()
@@ -60,27 +60,6 @@ class MainActivity : AppCompatActivity() {
             R.id.SIMPLE_NOTIFICATION_ID,
             builder.build()
         )
-    }
-
-    private fun doBuilder(): NotificationCompat.Builder {
-        val channelId = "my_channel_id"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "My Channel Name"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(channelId, name, importance)
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        return NotificationCompat.Builder(this, channelId)
-    }
-
-    // Удаление уведомление -
-    // требуется идентификатор, с которым оно
-    // было запущено
-    fun simpleCancel(view: View?) {
-        manager.cancel(R.id.SIMPLE_NOTIFICATION_ID)
     }
 
     // Запуск браузера через уведомление
@@ -124,11 +103,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    // Сложное уведомление - содержит дополнительные кнопки
-    // по щелчку на которые запустятся другие
-    // PendingIntent
-
-
+    // Сложное уведомление - содержит дополнительные кнопки по щелчку на которые запустятся другие PendingIntent
     fun complexNotification(view: View?) {
 
         val notificationManager = getSystemService(NotificationManager::class.java)
@@ -140,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         // PendingIntent для запуска карты
         val pMap = Utility.getUriPendingIntent(this, R.id.MAP_PENDING_ID, "geo:48.8606,2.3376")
         val builder = doBuilder()
+
         builder
             .setSmallIcon(android.R.drawable.ic_input_add)
             .setContentTitle("Экскурсия в Лувр")
@@ -179,11 +155,7 @@ class MainActivity : AppCompatActivity() {
         notificationManager.notify(R.id.LOUVRE_NOTIFICATION_ID, notification)
     }
 
-    private var numberOfMessages = 12
-
-    // Новый вид уведомлений - "Большая картинка"
-    // Будет полноэкранным (приоритет + звук)
-    // Со стэком активностей
+    // Новый вид уведомлений - "Большая картинка" Будет полноэкранным (приоритет + звук) со стэком активностей
     fun bigPicture(view: View?) {
         vibrate()
 
@@ -296,20 +268,6 @@ class MainActivity : AppCompatActivity() {
         notificationManager.notify(R.id.INBOX_STYLE_NOTIFICATION_ID, notification)
     }
 
-    private fun vibrate() {
-        val vibrator = ContextCompat.getSystemService(this, Vibrator::class.java)
-        if (vibrator?.hasVibrator() == true) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val vibrationEffect =
-                    VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1)
-                vibrator.vibrate(vibrationEffect)
-            } else {
-                // Для более старых версий Android можно использовать VIBRATE permission и использовать deprecated методы
-                vibrator.vibrate(400)
-            }
-        }
-    }
-
     //WorkManager
     fun progressService(view: View?) {
         val workRequest = OneTimeWorkRequest.Builder(ProgressWorker::class.java).build()
@@ -328,9 +286,89 @@ class MainActivity : AppCompatActivity() {
 //        startService(intent)
 //    }
 
+    // Inline reply уведомление -
+    // можно ввести текст
 
+    @SuppressLint("MissingPermission")
+    fun inlineReply(view: View?) {
 
+        val notificationManager = getSystemService(NotificationManager::class.java)
 
+        val builder = doBuilder()
+
+        val replyLabel = "Ответ"
+        val remoteInput = RemoteInput.Builder( //resources.getString(R.string.KEY_TEXT_REPLY)
+        "key_text_reply")
+            .setLabel(replyLabel)
+            .build()
+
+        val intent = Intent(this, ReplyReceiver::class.java)
+
+        val replyPendingIntent = PendingIntent.getBroadcast(
+            this,
+            R.id.DIRECT_REPLY_PENDING_ID,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val replyAction = NotificationCompat.Action.Builder(
+            android.R.drawable.ic_input_add,
+            "Ответить",
+            replyPendingIntent
+        )
+            .addRemoteInput(remoteInput)
+            .build()
+
+        builder
+            .setSmallIcon(android.R.drawable.sym_action_email)
+            .setContentTitle("Как насчет в кино ?")
+            .setContentText("У меня тут выдалось свободное время")
+            .addAction(replyAction)
+            .build()
+
+        notificationManager.notify(
+            R.id.DIRECT_REPLY_NOTIFICATION_ID,
+            builder.build()
+        )
+    }
+
+    private fun vibrate() {
+        val vibrator = ContextCompat.getSystemService(this, Vibrator::class.java)
+        if (vibrator?.hasVibrator() == true) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val vibrationEffect =
+                    VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1)
+                vibrator.vibrate(vibrationEffect)
+            } else {
+                // Для более старых версий Android можно использовать VIBRATE permission и использовать deprecated методы
+                vibrator.vibrate(400)
+            }
+        }
+    }
+
+    // Удаление уведомление - требуется идентификатор, с которым оно было запущено
+    fun simpleCancel(view: View?) {
+        manager.cancel(R.id.SIMPLE_NOTIFICATION_ID)
+    }
+
+    private fun doBuilder(): NotificationCompat.Builder {
+        val channelId = "my_channel_id"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel Name"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance)
+
+            channel.description = "My channel description"
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500)
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(this, channelId)
+    }
 
 
 //    fun custom(view: View?) {
@@ -350,33 +388,6 @@ class MainActivity : AppCompatActivity() {
 //        remote.setTextViewText(R.id.text, "Текст с картинкой")
 //        remote.setOnClickPendingIntent(R.id.button, pIntent)
 //    }
-
-    // Inline reply уведомление -
-    // можно ввести текст
-//    @SuppressLint("MissingPermission")
-//    fun inlineReply(view: View?) {
-//        val replyLabel = "Ответ"
-//        val remoteInput = RemoteInput.Builder(
-//            resources.getString(R.string.KEY_TEXT_REPLY)
-//        )
-//            .setLabel(replyLabel)
-//            .build()
-//        val intent: Intent? = null
-//        val replyPendingIntent: PendingIntent? = null
-//        val replyAction = NotificationCompat.Action.Builder(
-//            android.R.drawable.btn_plus,
-//            "Ответить",
-//            replyPendingIntent
-//        )
-//            .addRemoteInput(remoteInput)
-//            .build()
-//        val newMessageNotification: Notification? = null
-//        NotificationManagerCompat.from(this).notify(
-//            R.id.DIRECT_REPLY_NOTIFICATION_ID,
-//            newMessageNotification!!
-//        )
-//    }
-
 
 //    fun complexNotification(view: View?) {
 //
